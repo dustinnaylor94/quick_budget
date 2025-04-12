@@ -79,5 +79,21 @@ def update_expense(expense_id):
         expense['date'] = datetime.strptime(data.get('date'), '%Y-%m-%d').date()
     return jsonify({'success': True})
 
+@app.route('/budget/<int:budget_id>', methods=['PUT'])
+def update_budget(budget_id):
+    budget = next((b for b in budgets if b.id == budget_id), None)
+    if budget:
+        data = request.get_json()
+        budget.name = data.get('name', budget.name)
+        budget.total_amount = float(data.get('total_amount', budget.total_amount))
+    return jsonify({'success': True})
+
+@app.route('/budget/<int:budget_id>', methods=['DELETE'])
+def delete_budget(budget_id):
+    global budgets, expenses
+    budgets = [b for b in budgets if b.id != budget_id]
+    expenses = [e for e in expenses if e['budget_id'] != budget_id]
+    return jsonify({'success': True})
+
 if __name__ == '__main__':
     app.run(debug=True)
