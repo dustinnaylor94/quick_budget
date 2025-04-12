@@ -10,7 +10,11 @@ app = Flask(__name__)
 
 # Use PostgreSQL in production (Railway) or SQLite in development
 if 'DATABASE_URL' in os.environ:
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    # Fix for Railway's postgres:// URLs
+    database_url = os.environ['DATABASE_URL']
+    if database_url.startswith('postgres://'):
+        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///budget.db'
 
