@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    {% for budget in budgets %}
+    <div class="col-md-4 mb-4">
+        <div class="card budget-card" onclick="window.location.href='{{ url_for('view_budget', budget_id=budget.id) }}'">
+            <div class="card-body">
+                <h5 class="card-title">{{ budget.name }}</h5>
+                <div class="progress mb-3">
+                    <div class="progress-bar" role="progressbar" 
+                         style="width: {{ (budget.spent_amount / budget.total_amount * 100) if budget.total_amount > 0 else 0 }}%"
+                         aria-valuenow="{{ budget.spent_amount }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="{{ budget.total_amount }}">
+                    </div>
+                </div>
+                <p class="card-text">
+                    <strong>Budget:</strong> ${{ "%.2f"|format(budget.total_amount) }}<br>
+                    <strong>Spent:</strong> ${{ "%.2f"|format(budget.spent_amount) }}<br>
+                    <strong>Remaining:</strong> ${{ "%.2f"|format(budget.total_amount - budget.spent_amount) }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block action_button %}
+<div class="action-button" onclick="toggleActionMenu()">
+    <i class="bi bi-plus"></i>
+</div>
+<div class="action-menu" id="actionMenu">
+    <a href="{{ url_for('add_budget') }}"><i class="bi bi-wallet2"></i> Add Budget</a>
+    <a href="{{ url_for('add_expense') }}"><i class="bi bi-cash"></i> Add Expense</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleActionMenu() {
+    const menu = document.getElementById('actionMenu');
+    menu.classList.toggle('show');
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('actionMenu');
+    const button = document.querySelector('.action-button');
+    if (!menu.contains(event.target) && !button.contains(event.target)) {
+        menu.classList.remove('show');
+    }
+});
+</script>
+{% endblock %}
