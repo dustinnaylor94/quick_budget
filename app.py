@@ -38,7 +38,7 @@ def add_budget():
 @app.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
     if request.method == 'POST':
-        budget_id = request.form.get('budget_id')
+        budget_id = int(request.form.get('budget_id'))
         name = request.form.get('name')
         amount = float(request.form.get('amount'))
         date = datetime.strptime(request.form.get('date'), '%Y-%m-%d').date()
