@@ -1,0 +1,1 @@
+This is my WEB3200 Final Project. It's the beginnings of a budget app I'd like to create for my wife and I to use. It's very simple, and made to be quickly interacted with, without all the junk in the way.
